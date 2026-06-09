@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PiBot V3.28 Isolated 固件下载与测试平台</title>
+    <link rel="icon" type="image/png" href="assets/brand/pibot-ico-100x100.png">
+    <link rel="stylesheet" href="css/style.css?v=20260609-i18n1">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 头部 -->
+        <header class="main-header">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <img src="assets/brand/pibot-ico-100x100.png" alt="PiBot">
+                    </div>
+                    <div class="logo-text">
+                        <img class="brand-logo" src="assets/brand/pibot-logo-265x67.png" alt="PiBot Electronics Store">
+                        <span>PiBot V3.28 Isolated 固件下载与硬件测试平台</span>
+                    </div>
+                </div>
+                <div class="connection-status" id="connectionStatus">
+                    <span class="status-dot"></span>
+                    <span class="status-text">未连接</span>
+                </div>
+                <nav class="language-switch" aria-label="语言">
+                    <a href="index.html">EN</a>
+                    <a href="zh-cn.html" class="active">中文</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 固件下载区域 -->
+            <section class="section firmware-section">
+                <div class="section-header">
+                    <div class="section-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h13l3 3v13H4z"/>
+                            <path d="M8 4v6h8V4"/>
+                            <path d="M8 17h8"/>
+                        </svg>
+                    </div>
+                    <h2>固件下载</h2>
+                    <p class="section-desc">选择适合您的固件版本进行下载</p>
+                </div>
+                
+                <div class="firmware-cards">
+                    <!-- 原版固件 -->
+                    <div class="firmware-card">
+                        <div class="card-badge official">官方原版</div>
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                </svg>
+                            </div>
+                            <h3>GRBL v1.1h</h3>
+                            <span class="version">标准版本</span>
+                        </div>
+                        <div class="card-body">
+                            <ul class="feature-list">
+                                <li>✓ 标准GRBL 1.1h功能</li>
+                                <li>✓ 默认引脚配置</li>
+                                <li>✓ 支持Spindle_Direction</li>
+                            </ul>
+                            <div class="pin-config">
+                                <h4>默认引脚配置：</h4>
+                                <div class="pin-item">
+                                    <span class="pin-name">Spindle PWM</span>
+                                    <span class="pin-value">D11</span>
+                                </div>
+                                <div class="pin-item">
+                                    <span class="pin-name">Spindle Direction</span>
+                                    <span class="pin-value">D13</span>
+                                </div>
+                                <div class="pin-item">
+                                    <span class="pin-name">Coolant Mist (M7)</span>
+                                    <span class="pin-value">默认未启用</span>
+                                </div>
+                                <div class="pin-item">
+                                    <span class="pin-name">Coolant Flood (M8)</span>
+                                    <span class="pin-value">A3</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-download" onclick="downloadFirmware('official')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                下载固件
+                            </button>
+                            <button class="btn btn-program" onclick="programFirmware('official')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2a10 10 0 1010 10A10 10 0 0012 2zm0 18a8 8 0 118-8 8 8 0 01-8 8z"/>
+                                    <path d="M12 6v6l4 2"/>
+                                </svg>
+                                烧录到主板
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 定制版固件 -->
+                    <div class="firmware-card custom">
+                        <div class="card-badge custom">定制版本</div>
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                    <path d="M2 17l10 5 10-5"/>
+                                    <path d="M2 12l10 5 10-5"/>
+                                </svg>
+                            </div>
+                            <h3>GRBL v1.1h Custom</h3>
+                            <span class="version">PiBot V3.28 Isolated 专用</span>
+                        </div>
+                        <div class="card-body">
+                            <ul class="feature-list">
+                                <li>✓ 基于GRBL 1.1h定制</li>
+                                <li>✓ 优化引脚分配</li>
+                                <li>✓ 支持Spindle_Enable 及 Cool_Mist</li>
+                            </ul>
+                            <div class="pin-config highlight">
+                                <h4>定制引脚配置：</h4>
+                                <div class="pin-item modified">
+                                    <span class="pin-name">Spindle PWM</span>
+                                    <span class="pin-value">D11</span>
+                                   <span class="pin-unchanged">(不变)</span>
+                                </div>
+                                <div class="pin-item modified">
+                                    <span class="pin-name">Spindle Enable</span>
+                                    <span class="pin-value">D13</span> 
+                                    <span class="pin-change">← M3/M4 OPEN</span>
+                                </div>
+                                <div class="pin-item">
+                                    <span class="pin-name">Coolant Mist (M7)</span>
+                                    <span class="pin-value">A4</span>
+                                    <span class="pin-change">← M7 OPEN</span>
+                                </div>
+                                <div class="pin-item">
+                                    <span class="pin-name">Coolant Flood (M8)</span>
+                                    <span class="pin-value">A3</span>
+                                    <span class="pin-unchanged">(不变)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-download btn-primary" onclick="downloadFirmware('custom')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                下载固件
+                            </button>
+                            <button class="btn btn-program btn-primary" onclick="programFirmware('custom')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2a10 10 0 1010 10A10 10 0 0012 2zm0 18a8 8 0 118-8 8 8 0 01-8 8z"/>
+                                    <path d="M12 6v6l4 2"/>
+                                </svg>
+                                烧录到主板
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            <!-- 烧录进度区域 -->
+            <div class="program-section" id="programSection" style="display:none;">
+                <div class="section-header">
+                    <div class="section-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 3v8"/>
+                            <path d="M8 7h8"/>
+                            <path d="M6 13h12v7H6z"/>
+                        </svg>
+                    </div>
+                    <h2>固件烧录</h2>
+                    <p class="section-desc">通过串口直接烧录固件到主板</p>
+                </div>
+                <div class="program-panel">
+                    <div class="program-info">
+                        <span class="program-name" id="programName">--</span>
+                        <span class="program-stage" id="programStage">准备中...</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+                    </div>
+                    <div class="program-actions">
+                        <button class="btn btn-cancel" onclick="cancelProgram()">取消</button>
+                    </div>
+                </div>
+            </div>
+
+
+                <div class="firmware-note">
+                    <div class="note-icon">i</div>
+                    <div class="note-content">
+                        <p><strong>说明：</strong>定制版固件针对 PiBot V3.28 Isolated 硬件设计进行了引脚优化。如需自行编译，请修改 GRBL 源码中的 <code>config.h</code>。</p>
+                        <p class="note-detail">所有输出均为高电平有效。输入低电平有效包含：X/Y/Z限位、对刀探针、急停(Abort)、恢复(Resume)、保持(Hold)。用跳帽短接Signal和GND可以测试触发。</p>
+                        <p class="note-detail driver-note">
+                            <strong>CH340驱动：</strong>如果浏览器连接时看不到串口，请先安装CH340/CH341串口驱动。
+                            <a href="https://www.wch-ic.com/downloads/CH341SER.ZIP.html" target="_blank" rel="noopener noreferrer">官方下载</a>
+                            <a href="CH341SER.zip" download>本地下载</a>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 串口连接区域 -->
+            <section class="section connect-section">
+                <div class="section-header">
+                    <div class="section-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M8 3v5"/>
+                            <path d="M16 3v5"/>
+                            <path d="M6 8h12v5a6 6 0 01-12 0z"/>
+                            <path d="M12 19v2"/>
+                        </svg>
+                    </div>
+                    <h2>串口连接</h2>
+                    <p class="section-desc">连接主板进行实时测试与监控</p>
+                </div>
+
+                <div class="serial-notice" id="serialNotice">
+                    <span class="serial-notice-label">串口提示</span>
+                    <span class="serial-notice-text">请选择串口连接主板。</span>
+                </div>
+                
+                <div class="connect-panel">
+                    <div class="connect-row">
+                        <button class="btn btn-connect" id="connectBtn" type="button">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                            <span>连接设备</span>
+                        </button>
+                        <div class="port-info" id="portInfo">
+                            <span class="no-port">未选择串口</span>
+                        </div>
+                        <div class="baud-rate">
+                            <label>波特率：</label>
+                            <select id="baudRate">
+                                <option value="115200" selected>115200</option>
+                                <option value="57600">57600</option>
+                                <option value="38400">38400</option>
+                                <option value="19200">19200</option>
+                                <option value="9600">9600</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 终端 -->
+            <div class="terminal-panel">
+                <div class="terminal-header">
+                    <h3>串口终端</h3>
+                    <div class="terminal-actions">
+                        <button class="term-btn" onclick="clearTerminal()">清空</button>
+                        <button class="term-btn" onclick="sendCommand('$$')">查看参数</button>
+                        <button class="term-btn" onclick="sendCommand('$I')">查看信息</button>
+                        <button class="term-btn" onclick="sendCommand('?')">查询状态</button>
+                    </div>
+                </div>
+                <div class="terminal-body">
+                    <div class="terminal-output" id="terminalOutput"></div>
+                </div>
+                <div class="terminal-input">
+                    <input type="text" id="commandInput" placeholder="输入G代码或GRBL命令..." 
+                           onkeypress="if(event.key==='Enter')sendManualCommand()">
+                    <button class="btn btn-send" onclick="sendManualCommand()">发送</button>
+                </div>
+            </div>
+
+            <!-- 测试监控区域 -->
+            <section class="section test-section" id="testSection">
+                <div class="section-header">
+                    <div class="section-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6 3h12"/>
+                            <path d="M9 3v5l-5 9a3 3 0 002.6 4.5h8.8A3 3 0 0018 17L13 8V3"/>
+                            <path d="M7 16h10"/>
+                        </svg>
+                    </div>
+                    <h2>硬件测试</h2>
+                    <p class="section-desc">实时监控主板输入状态与系统信息</p>
+                </div>
+
+                <div class="test-grid">
+                    <!-- 系统状态 -->
+                    <div class="test-panel status-panel">
+                        <div class="panel-header">
+                            <h3>系统状态</h3>
+                            <div class="live-indicator" id="liveIndicator">
+                                <span class="live-dot"></span>
+                                <span>实时</span>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="status-display">
+                                <div class="status-item">
+                                    <span class="status-label">状态</span>
+                                    <span class="status-value" id="grblState">--</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="status-label">工作模式</span>
+                                    <span class="status-value" id="workMode">--</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="status-label">主轴转速</span>
+                                    <span class="status-value" id="spindleSpeed">--</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="status-label">冷却状态</span>
+                                    <span class="status-value" id="coolantState">--</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 限位开关 -->
+                    <div class="test-panel limits-panel">
+                        <div class="panel-header">
+                            <h3>限位开关</h3>
+                            <span class="panel-subtitle">Limit Switches</span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="input-grid">
+                                <div class="input-item" id="limitX">
+                                    <div class="input-icon">
+                                        <span class="axis-label">X</span>
+                                    </div>
+                                    <div class="input-info">
+                                        <span class="input-name">X轴限位</span>
+                                        <span class="input-state">未触发</span>
+                                    </div>
+                                    <div class="input-led"></div>
+                                </div>
+                                <div class="input-item" id="limitY">
+                                    <div class="input-icon">
+                                        <span class="axis-label">Y</span>
+                                    </div>
+                                    <div class="input-info">
+                                        <span class="input-name">Y轴限位</span>
+                                        <span class="input-state">未触发</span>
+                                    </div>
+                                    <div class="input-led"></div>
+                                </div>
+                                <div class="input-item" id="limitZ">
+                                    <div class="input-icon">
+                                        <span class="axis-label">Z</span>
+                                    </div>
+                                    <div class="input-info">
+                                        <span class="input-name">Z轴限位</span>
+                                        <span class="input-state">未触发</span>
+                                    </div>
+                                    <div class="input-led"></div>
+                                </div>
+                                <div class="input-item" id="probeInput">
+                                    <div class="input-icon probe">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="3"/>
+                                            <path d="M12 2v4M12 18v4M2 12h4M18 12h4"/>
+                                        </svg>
+                                    </div>
+                                    <div class="input-info">
+                                        <span class="input-name">对刀探针</span>
+                                        <span class="input-state">未触发</span>
+                                    </div>
+                                    <div class="input-led"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 探针与功能输入 -->
+                    <div class="test-panel inputs-panel">
+                        <div class="panel-header">
+                            <h3>按钮输入</h3>
+                            <span class="panel-subtitle">Button Inputs</span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="input-grid">
+                                <div class="input-item warning" id="abortInput">
+                                    <div class="input-icon abort">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10"/>
+                                            <line x1="15" y1="9" x2="9" y2="15"/>
+                                            <line x1="9" y1="9" x2="15" y2="15"/>
+                                        </svg>
+                                    </div>
+                                    <div class="input-info">
+                                        <span class="input-name">复位 / Abort</span>
+                                        <span class="input-state">正常</span>
+                                    </div>
+                                    <div class="input-led"></div>
+                                </div>
+                                <div class="input-item" id="holdInput">
+                                    <div class="input-icon hold">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="6" y="4" width="4" height="16"/>
+                                            <rect x="14" y="4" width="4" height="16"/>
+                                        </svg>
+                                    </div>
+                                    <div class="input-info">
+                                        <span class="input-name">保持 / Hold</span>
+                                        <span class="input-state">未触发</span>
+                                    </div>
+                                    <div class="input-led"></div>
+                                </div>
+                                <div class="input-item" id="resumeInput">
+                                    <div class="input-icon resume">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polygon points="5 3 19 12 5 21 5 3"/>
+                                        </svg>
+                                    </div>
+                                    <div class="input-info">
+                                        <span class="input-name">启动 / Resume</span>
+                                        <span class="input-state">未触发</span>
+                                    </div>
+                                    <div class="input-led"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 坐标显示 -->
+                    <div class="test-panel coords-panel">
+                        <div class="panel-header">
+                            <h3>坐标位置</h3>
+                            <span class="panel-subtitle">Machine / Work Position</span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="coords-display">
+                                <div class="coord-row">
+                                    <span class="coord-axis x">X</span>
+                                    <div class="coord-values">
+                                        <div class="coord-machine">
+                                            <span class="coord-label">机床</span>
+                                            <span class="coord-value" id="mx">0.000</span>
+                                        </div>
+                                        <div class="coord-work">
+                                            <span class="coord-label">工件</span>
+                                            <span class="coord-value" id="wx">0.000</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="coord-row">
+                                    <span class="coord-axis y">Y</span>
+                                    <div class="coord-values">
+                                        <div class="coord-machine">
+                                            <span class="coord-label">机床</span>
+                                            <span class="coord-value" id="my">0.000</span>
+                                        </div>
+                                        <div class="coord-work">
+                                            <span class="coord-label">工件</span>
+                                            <span class="coord-value" id="wy">0.000</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="coord-row">
+                                    <span class="coord-axis z">Z</span>
+                                    <div class="coord-values">
+                                        <div class="coord-machine">
+                                            <span class="coord-label">机床</span>
+                                            <span class="coord-value" id="mz">0.000</span>
+                                        </div>
+                                        <div class="coord-work">
+                                            <span class="coord-label">工件</span>
+                                            <span class="coord-value" id="wz">0.000</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- XYZ Jog 控制 -->
+                    <div class="test-panel jog-panel">
+                        <div class="panel-header">
+                            <h3>步进控制</h3>
+                            <span class="panel-subtitle">Jog Control</span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="jog-settings">
+                                <div class="jog-setting">
+                                    <label>步进距离</label>
+                                    <div class="jog-steps">
+                                        <button class="step-btn active" data-step="0.1" onclick="setJogStep(0.1)">0.1</button>
+                                        <button class="step-btn" data-step="1" onclick="setJogStep(1)">1</button>
+                                        <button class="step-btn" data-step="10" onclick="setJogStep(10)">10</button>
+                                        <button class="step-btn" data-step="100" onclick="setJogStep(100)">100</button>
+                                    </div>
+                                </div>
+                                <div class="jog-setting">
+                                    <label>速度 (mm/min)</label>
+                                    <input type="number" id="jogFeedrate" value="1000" min="10" max="10000">
+                                </div>
+                            </div>
+                            <div class="jog-pad">
+                                <div class="jog-row">
+                                    <div class="jog-empty"></div>
+                                    <button class="jog-btn" id="jogYplus" onmousedown="startJog('Y',1)" onmouseup="stopJog()" onmouseleave="stopJog()" ontouchstart="startJog('Y',1)" ontouchend="stopJog()">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+                                        <span class="axis-label y">Y+</span>
+                                    </button>
+                                    <div class="jog-empty"></div>
+                                </div>
+                                <div class="jog-row">
+                                    <button class="jog-btn" id="jogXminus" onmousedown="startJog('X',-1)" onmouseup="stopJog()" onmouseleave="stopJog()" ontouchstart="startJog('X',-1)" ontouchend="stopJog()">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                                        <span class="axis-label x">X-</span>
+                                    </button>
+                                    <button class="jog-btn jog-home" onclick="sendCommand('$H')">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                                        <span>回零</span>
+                                    </button>
+                                    <button class="jog-btn" id="jogXplus" onmousedown="startJog('X',1)" onmouseup="stopJog()" onmouseleave="stopJog()" ontouchstart="startJog('X',1)" ontouchend="stopJog()">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                        <span class="axis-label x">X+</span>
+                                    </button>
+                                </div>
+                                <div class="jog-row">
+                                    <div class="jog-empty"></div>
+                                    <button class="jog-btn" id="jogYminus" onmousedown="startJog('Y',-1)" onmouseup="stopJog()" onmouseleave="stopJog()" ontouchstart="startJog('Y',-1)" ontouchend="stopJog()">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+                                        <span class="axis-label y">Y-</span>
+                                    </button>
+                                    <div class="jog-empty"></div>
+                                </div>
+                                <div class="jog-row z-row">
+                                    <button class="jog-btn z-btn" id="jogZplus" onmousedown="startJog('Z',1)" onmouseup="stopJog()" onmouseleave="stopJog()" ontouchstart="startJog('Z',1)" ontouchend="stopJog()">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+                                        <span class="axis-label z">Z+</span>
+                                    </button>
+                                    <button class="jog-btn z-btn" id="jogZminus" onmousedown="startJog('Z',-1)" onmouseup="stopJog()" onmouseleave="stopJog()" ontouchstart="startJog('Z',-1)" ontouchend="stopJog()">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7 7 7-7"/></svg>
+                                        <span class="axis-label z">Z-</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- XYZ 信号灯测试 -->
+                    <div class="test-panel signal-panel">
+                        <div class="panel-header">
+                            <h3>XYZ 信号测试</h3>
+                            <span class="panel-subtitle">EN / DIR / CLK</span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="signal-settings">
+                                <div class="signal-setting">
+                                    <label>单次距离 (mm)</label>
+                                    <input type="number" id="signalStep" value="1" min="0.01" max="100" step="0.01">
+                                </div>
+                                <div class="signal-setting">
+                                    <label>速度 (mm/min)</label>
+                                    <input type="number" id="signalFeedrate" value="300" min="10" max="5000" step="10">
+                                </div>
+                                <div class="signal-setting">
+                                    <label>往返次数 (times/per)</label>
+                                    <input type="number" id="signalCycles" value="3" min="1" max="20" step="1">
+                                </div>
+                            </div>
+                            <div class="signal-buttons">
+                                <button class="signal-btn axis-x" onclick="runSignalTest('X')">
+                                    <span>X</span>
+                                    <small>DIR/CLK</small>
+                                </button>
+                                <button class="signal-btn axis-y" onclick="runSignalTest('Y')">
+                                    <span>Y</span>
+                                    <small>DIR/CLK</small>
+                                </button>
+                                <button class="signal-btn axis-z" onclick="runSignalTest('Z')">
+                                    <span>Z</span>
+                                    <small>DIR/CLK</small>
+                                </button>
+                                <button class="signal-btn all" onclick="runAllSignalTest()">
+                                    <span>ALL</span>
+                                    <small>XYZ</small>
+                                </button>
+                            </div>
+                            <div class="signal-hint">
+                                <span class="signal-hint-row"><span class="signal-dot en"></span> EN 在运动时点亮</span>
+                                <span class="signal-hint-row"><span class="signal-dot dir"></span> DIR 会随方向切换</span>
+                                <span class="signal-hint-row"><span class="signal-dot clk"></span> CLK 会快速闪烁</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 手动控制 -->
+                    <div class="test-panel control-panel">
+                        <div class="panel-header">
+                            <h3>手动控制</h3>
+                            <span class="panel-subtitle">Manual Control</span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="control-buttons">
+                                <button class="ctrl-btn" id="btnReset" onclick="sendCommand('$X')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="1 4 1 10 7 10"/>
+                                        <path d="M3.51 15a9 9 0 102.13-9.36L1 10"/>
+                                    </svg>
+                                    解锁
+                                </button>
+                                <button class="ctrl-btn" id="btnHome" onclick="sendCommand('$H')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                                        <polyline points="9 22 9 12 15 12 15 22"/>
+                                    </svg>
+                                    回零
+                                </button>
+                                <button class="ctrl-btn" id="btnHold" onclick="sendCommand('!')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="6" y="4" width="4" height="16"/>
+                                        <rect x="14" y="4" width="4" height="16"/>
+                                    </svg>
+                                    暂停
+                                </button>
+                                <button class="ctrl-btn" id="btnResume" onclick="sendCommand('~')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polygon points="5 3 19 12 5 21 5 3"/>
+                                    </svg>
+                                    继续
+                                </button>
+                                <button class="ctrl-btn warning" id="btnResetGrbl" onclick="sendCommand('\x18')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <line x1="15" y1="9" x2="9" y2="15"/>
+                                        <line x1="9" y1="9" x2="15" y2="15"/>
+                                    </svg>
+                                    软复位
+                                </button>
+                                <button class="ctrl-btn" id="btnCheck" onclick="sendCommand('$C')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                    检查模式
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 输出测试 -->
+                    <div class="test-panel output-panel">
+                        <div class="panel-header">
+                            <h3>输出测试</h3>
+                            <span class="panel-subtitle">Output Test</span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="output-control">
+                                <div class="output-group spindle-group">
+                                    <div class="output-group-title">
+                                        <span>主轴输出</span>
+                                        <small>D13 Enable / D11 PWM</small>
+                                    </div>
+                                    <div class="spindle-command-grid">
+                                        <button class="spindle-command-btn" id="btnM3Full" onclick="sendOutputCommand('M3 S1000')">
+                                            <span>M3 S1000</span>
+                                            <small>正转最大</small>
+                                        </button>
+                                        <button class="spindle-command-btn" id="btnM3Half" onclick="sendOutputCommand('M3 S500')">
+                                            <span>M3 S500</span>
+                                            <small>正转半速</small>
+                                        </button>
+                                        <button class="spindle-command-btn" id="btnM4Full" onclick="sendOutputCommand('M4 S1000')">
+                                            <span>M4 S1000</span>
+                                            <small>反转最大</small>
+                                        </button>
+                                        <button class="spindle-command-btn" id="btnM4Half" onclick="sendOutputCommand('M4 S500')">
+                                            <span>M4 S500</span>
+                                            <small>反转半速</small>
+                                        </button>
+                                        <button class="spindle-command-btn stop" id="btnM5" onclick="sendOutputCommand('M5')">
+                                            <span>M5</span>
+                                            <small>关闭主轴</small>
+                                        </button>
+                                    </div>
+                                    <div class="output-state-row">
+                                        <span>主轴状态</span>
+                                        <strong id="spindleState">OFF</strong>
+                                    </div>
+                                </div>
+
+                                <div class="output-group coolant-group">
+                                    <div class="output-group-title">
+                                        <span>冷却输出</span>
+                                        <small>A4 / A3</small>
+                                    </div>
+                                    <div class="coolant-switch-row">
+                                        <div class="coolant-switch-info">
+                                            <span>M7 冷却雾</span>
+                                            <small>A4 高电平有效</small>
+                                        </div>
+                                        <label class="toggle-switch" title="M7 开 / M9 关">
+                                            <input type="checkbox" id="mistToggle" onchange="setCoolantOutput('mist', this.checked)">
+                                            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                            <em id="mistState">OFF</em>
+                                        </label>
+                                    </div>
+                                    <div class="coolant-switch-row">
+                                        <div class="coolant-switch-info">
+                                            <span>M8 冷却液</span>
+                                            <small>A3 高电平有效</small>
+                                        </div>
+                                        <label class="toggle-switch" title="M8 开 / M9 关">
+                                            <input type="checkbox" id="floodToggle" onchange="setCoolantOutput('flood', this.checked)">
+                                            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                            <em id="floodState">OFF</em>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="main-footer">
+            <p>PiBot V3.28 Isolated 主板测试平台 | 基于 Web Serial API | 建议使用 Chrome / Edge 浏览器</p>
+        </footer>
+    </div>
+
+    <!-- 固件说明模态框 -->
+    <div class="modal" id="firmwareModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">固件说明</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- 动态内容 -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal()">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js?v=20260609-i18n1"></script>
+</body>
+</html>

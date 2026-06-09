@@ -1,0 +1,9 @@
+diff --git a/grbl/config.h b/grbl/config.h
+--- a/grbl/config.h
++++ b/grbl/config.h
+@@
+-// #define ENABLE_M7 // Disabled by default. Uncomment to enable.
++#define ENABLE_M7 // Enable mist coolant M7 on Arduino Uno analog pin A4.
+@@
+-// #define USE_SPINDLE_DIR_AS_ENABLE_PIN // Default disabled. Uncomment to enable.
++#define USE_SPINDLE_DIR_AS_ENABLE_PIN // Use D13/PB5 as spindle enable instead of direction.
