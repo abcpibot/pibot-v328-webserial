@@ -1,29 +1,30 @@
-PiBot V3.28 Isolated Web Serial 固件下载与测试平台
-===================================================
+PiBot V3.28 Isolated Web Serial Firmware & Test Platform
+========================================================
 
-项目定位
---------
-这是一个纯静态网页项目，用于 PiBot V3.28 Isolated 主板的固件下载、Web Serial 直接烧录、串口终端和硬件测试。
-
-客户只需要打开 HTTPS 网址即可使用，不需要安装 Python、本地代理、Arduino IDE 或 XLoader。
-
-语言版本：
-- index.html：英文主页，面向国外客户
-- zh-cn.html：中文版本，供内部或中文客户使用
-
-后续如果需要德文、法文等版本，建议复制 index.html 生成 de.html、fr.html，再把页面静态文字翻译；JS 已经按页面 lang 自动切换英文/中文运行提示，更多语言可继续扩展同一套语言函数。
-
-客户电脑只需要：
-- CH340 / USB 串口驱动
-- Chrome 或 Edge 浏览器
-
-CH340驱动下载：
-- 官方下载地址：https://www.wch-ic.com/downloads/CH341SER.ZIP.html
-- 本地下载地址：网站根目录下的 CH341SER.zip
-
-上传服务器的文件
+Project Overview
 ----------------
-将以下内容上传到 VPS / 网站服务器：
+This is a static Web Serial platform for the PiBot V3.28 Isolated controller board. It provides firmware download, direct Web Serial flashing, a serial terminal, and hardware input/output testing.
+
+Customers only need to open the HTTPS web page. They do not need Python, a local proxy, Arduino IDE, or XLoader.
+
+Language versions:
+- index.html: English homepage for international customers
+- zh-cn.html: Chinese auxiliary page for internal use or Chinese customers
+
+For future German, French, or other versions, copy index.html to de.html, fr.html, etc. The JavaScript runtime messages already switch between English and Chinese based on the page language and can be extended for more languages later.
+
+Customer Requirements
+---------------------
+- CH340 / USB serial driver
+- Chrome or Edge browser
+
+CH340 driver download:
+- Official download: https://www.wch-ic.com/downloads/CH341SER.ZIP.html
+- Local download: CH341SER.zip in the website root directory
+
+Files To Upload
+---------------
+Upload these files and folders to GitHub Pages, a VPS, or any HTTPS static hosting service:
 
 index.html
 zh-cn.html
@@ -31,118 +32,151 @@ css/
 js/
 assets/
 firmware/
-客户使用说明.txt
+CH341SER.zip
 说明.txt
-CH341SER.zip        可选，用于给客户下载 CH340 驱动
+客户使用说明.txt
 
-服务器要求
-----------
-必须使用 HTTPS。
+Server Requirements
+-------------------
+HTTPS is required.
 
-Web Serial 只能在安全上下文中工作，也就是：
-- HTTPS 网站
-- localhost 本地测试
+Web Serial only works in secure browser contexts:
+- HTTPS websites
+- localhost for local testing
 
-客户如果用 http:// 普通网址打开，浏览器不会允许网页访问串口。
+If the customer opens the page through plain http://, the browser will not allow serial port access.
 
-推荐浏览器
-----------
+Recommended Browsers
+--------------------
 - Chrome
 - Edge
 
-不推荐：
+Not recommended:
 - Firefox
 - Safari
-- 手机浏览器
+- Mobile browsers
 
-客户使用流程
-------------
-1. 客户用 Chrome / Edge 打开 HTTPS 网址。
-2. 如果浏览器看不到串口，先安装 CH340 驱动：
-   - 官方下载地址：https://www.wch-ic.com/downloads/CH341SER.ZIP.html
-   - 本地下载地址：网站根目录下的 CH341SER.zip
-3. 插入 PiBot V3.28 Isolated 主板 USB。
-4. 点击网页上的“连接设备”。
-5. 浏览器弹出串口选择窗口。
-6. 选择 CH340 / COM 端口。
-7. 连接成功后可进行固件烧录、硬件测试和串口命令操作。
+Customer Workflow
+-----------------
+1. Open the HTTPS website in Chrome or Edge.
+2. If the serial port is not listed, install the CH340 driver first:
+   - Official download: https://www.wch-ic.com/downloads/CH341SER.ZIP.html
+   - Local download: CH341SER.zip from this website
+3. Connect the PiBot V3.28 Isolated board through USB.
+4. Click "Connect Device".
+5. Select the CH340 / COM port in the browser serial port picker.
+6. After connection, use firmware flashing, hardware testing, and serial terminal commands as needed.
 
-网页功能
---------
-- 下载官方 GRBL v1.1h 固件
-- 下载 PiBot V3.28 Isolated 定制固件
-- Web Serial 直接烧录 ATmega328P bootloader
-- 串口连接和 GRBL 命令终端
-- XYZ 限位、Probe、Abort、Hold、Resume 输入监控
-- M3/M4/M5 主轴输出测试
-- M7(A4)、M8(A3)、M9 冷却输出测试
-- XYZ EN / DIR / CLK 信号灯测试
+Web Page Features
+-----------------
+- Download official GRBL v1.1h firmware
+- Download PiBot V3.28 Isolated custom firmware
+- Flash ATmega328P bootloader directly through Web Serial
+- Serial connection and GRBL command terminal
+- Monitor XYZ limit, probe, abort, hold, and resume inputs
+- Test M3/M4/M5 spindle outputs
+- Test M7(A4), M8(A3), and M9 coolant outputs
+- Test XYZ EN / DIR / CLK signal indicators
 
-串口终端说明
-------------
-页面后台会静默发送 `?` 来刷新坐标、限位和输出状态，但自动返回的 `<Idle|MPos...>` 不会刷到终端里。
+Serial Terminal Notes
+---------------------
+The page silently sends `?` in the background to refresh coordinates, limit switches, and output states. Automatic `<Idle|MPos...>` reports are not printed continuously in the terminal.
 
-只有手动点击“查询状态”或在终端输入 `?` 时，终端才显示一条 MPos 状态报告。
+The terminal only shows MPos status when the customer clicks "Status" or manually enters `?`.
 
-烧录说明
---------
-网页通过浏览器 Web Serial 访问客户电脑本机串口，并使用 stk500v1 协议写入 ATmega328P bootloader。
+Firmware Flashing Notes
+-----------------------
+The page uses the browser Web Serial API to access the customer's local serial port and writes the ATmega328P bootloader with the stk500v1 protocol.
 
-常用 bootloader 波特率：
-- 115200：Arduino Uno / Optiboot 常用
-- 57600：部分旧 Nano bootloader 可尝试
+Common bootloader baud rates:
+- 115200: common for Arduino Uno / Optiboot
+- 57600: used by some older Nano bootloaders
 
-烧录时请关闭 Arduino IDE、XLoader、串口调试助手和其它占用 COM 口的软件。
+Before flashing, close Arduino IDE, XLoader, serial monitor tools, and any other software that may occupy the COM port.
 
-烧录完成后，请按页面提示断开并重新连接串口，再进行测试。
+After flashing, follow the page prompt to disconnect and reconnect the serial port before testing.
 
-固件配置重点
-------------
-GRBL 1.1h 官方默认没有启用 M7。
+Firmware Configuration Notes
+----------------------------
+Official GRBL 1.1h does not enable M7 by default.
 
-PiBot V3.28 Isolated 定制固件需要：
+The PiBot V3.28 Isolated custom firmware uses:
+- D13 = Spindle Enable, active high
+- D11 = Spindle PWM
+- A4 = Coolant Mist (M7), active high
+- A3 = Coolant Flood (M8), active high
+
+The GRBL source file `grbl/config.h` must enable both:
+
+#define ENABLE_M7
+#define USE_SPINDLE_DIR_AS_ENABLE_PIN
+
+Enabling only `USE_SPINDLE_DIR_AS_ENABLE_PIN` is not enough. M7/A4 will not work unless `ENABLE_M7` is also enabled.
+
+Input Test Notes
+----------------
+The monitored inputs are:
+- X/Y/Z limit switches
+- Probe
+- Abort / Reset
+- Hold
+- Resume
+
+Inputs are active low. To test, short the corresponding Signal pin to GND with a jumper. The page status indicator should change immediately.
+
+Output Test Notes
+-----------------
+Spindle outputs:
+- M3 S1000: clockwise full output
+- M3 S500: clockwise half PWM output
+- M4 S1000: counterclockwise full output
+- M4 S500: counterclockwise half PWM output
+- M5: spindle off
+
+Coolant outputs:
+- M7: A4 high output
+- M8: A3 high output
+- M9: turn off M7/M8
+
+Directory Notes
+---------------
+assets/brand/       PiBot logo and favicon
+css/style.css       Page styles
+js/app.js           Web Serial, flashing, and test logic
+firmware/           HEX firmware files and source patch notes
+
+This project has removed the old local Python proxy and exe client workflow. Only the Web Serial mode is kept.
+
+
+中文辅助说明
+============
+
+这是一个纯静态网页项目，用于 PiBot V3.28 Isolated 主板的固件下载、Web Serial 直接烧录、串口终端和硬件测试。
+
+默认主页为英文版：
+- index.html：英文主页，面向国外客户
+- zh-cn.html：中文辅助页面，供内部或中文客户使用
+
+客户只需要：
+- 安装 CH340 / USB 串口驱动
+- 使用 Chrome 或 Edge 浏览器
+- 通过 HTTPS 打开网页
+
+客户不需要安装 Python、本地代理、Arduino IDE 或 XLoader。
+
+CH340 驱动：
+- 官方下载地址：https://www.wch-ic.com/downloads/CH341SER.ZIP.html
+- 本地下载地址：网站根目录下的 CH341SER.zip
+
+PiBot V3.28 Isolated 定制固件重点：
 - D13 = Spindle Enable，高电平有效
 - D11 = Spindle PWM
 - A4 = Coolant Mist (M7)，高电平有效
 - A3 = Coolant Flood (M8)，高电平有效
 
-因此必须在 GRBL 源码 `grbl/config.h` 中同时启用：
+GRBL 源码 `grbl/config.h` 必须同时启用：
 
 #define ENABLE_M7
 #define USE_SPINDLE_DIR_AS_ENABLE_PIN
 
 只启用 `USE_SPINDLE_DIR_AS_ENABLE_PIN` 不够，M7/A4 仍然不会工作。
-
-输入测试说明
-------------
-页面监控的输入包括：
-- X/Y/Z 限位
-- Probe 对刀探针
-- Abort 急停/复位
-- Hold 暂停
-- Resume 恢复
-
-输入为低电平触发。测试时可用跳帽短接对应 Signal 和 GND，页面状态灯应立即变化。
-
-输出测试说明
-------------
-主轴输出：
-- M3 S1000：正转最大
-- M3 S500：正转半速
-- M4 S1000：反转最大
-- M4 S500：反转半速
-- M5：关闭主轴
-
-冷却输出：
-- M7：A4 输出高电平
-- M8：A3 输出高电平
-- M9：关闭 M7/M8
-
-目录说明
---------
-assets/brand/       PiBot logo 和 favicon
-css/style.css       页面样式
-js/app.js           Web Serial、烧录和测试逻辑
-firmware/           hex 固件文件
-
-本项目已经移除本地 Python 代理和 exe 客户端方案，只保留 Web Serial 模式。
