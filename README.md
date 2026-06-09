@@ -87,8 +87,8 @@ js/                 Web Serial, flashing, and test logic
 assets/brand/       PiBot logo and favicon
 firmware/           HEX firmware files and source patch notes
 CH341SER.zip        Local CH340/CH341 driver package
-说明.txt             Full project notes, English first with Chinese appendix
-客户使用说明.txt       Customer guide, English first with Chinese appendix
 ```
 
 The old local Python proxy and exe client workflow has been removed. This project keeps only the Web Serial mode.
+
+Local Chinese notes such as `说明.txt` and `客户使用说明.txt` are kept for internal reference and are intentionally not published in this repository.
